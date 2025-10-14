@@ -159,7 +159,7 @@
                 <label>Proof:</label>
                 <div class="file-upload" id="fileUpload">
                     <p>📎 Drag to drop files or click to select</p>
-                    <p style="font-size: 12px; color: #999; margin-top: 5px;">Multiple files supported</p>
+                    <p style="font-size: 12px; color: #999; margin-top: 5px;">Files will be uploaded to temporary hosting</p>
                     <input type="file" id="fileInput" multiple style="display: none;" accept="image/*,video/*,.pdf,.txt,.doc,.docx">
                 </div>
                 <div id="fileList" class="file-list"></div>
@@ -213,6 +213,19 @@
             fileList.innerHTML = `<strong>Selected files:</strong><br>${fileNames}`;
         }
         
+        async function uploadToFileIO(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            const response = await fetch('https://file.io', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            return result.success ? result.link : null;
+        }
+        
         document.getElementById('reportForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -223,12 +236,26 @@
             const victimContact = document.getElementById('victimContact').value;
             const timeOfAction = new Date().toLocaleString();
             
-            const fileInfo = selectedFiles.length > 0 ? 
-                `${selectedFiles.length} file(s) attached: ${selectedFiles.map(f => f.name).join(', ')}` : 
-                'No files attached';
+            let fileInfo = 'No files attached';
+            
+            if (selectedFiles.length > 0) {
+                document.getElementById('message').innerHTML = '<div style="color: #666;">Uploading files...</div>';
+                
+                const uploadPromises = selectedFiles.map(async (file) => {
+                    try {
+                        const link = await uploadToFileIO(file);
+                        return link ? `[${file.name}](${link})` : `${file.name} (upload failed)`;
+                    } catch {
+                        return `${file.name} (upload failed)`;
+                    }
+                });
+                
+                const uploadResults = await Promise.all(uploadPromises);
+                fileInfo = uploadResults.join('\n');
+            }
             
             const embed = {
-                title: "⚖️ OFFICIAL REPORT SUBMISSION",
+                title: "OFFICIAL PROJECT REPORT SYSTEM",
                 color: 0xe74c3c,
                 fields: [
                     { name: "Your Discord Username", value: discordUsername, inline: true },
@@ -251,7 +278,7 @@
                 });
                 
                 if (response.ok) {
-                    document.getElementById('message').innerHTML = '<div class="success">✅ Report submitted successfully and is under review.</div>';
+                    document.getElementById('message').innerHTML = '<div class="success">✅ Report submitted successfully with file links.</div>';
                     document.getElementById('reportForm').reset();
                     selectedFiles = [];
                     updateFileList();
