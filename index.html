@@ -6,27 +6,29 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
         }
         .container {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.98);
+            padding: 45px;
+            border-radius: 15px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
             width: 100%;
-            max-width: 450px;
-            backdrop-filter: blur(10px);
+            max-width: 500px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         h2 {
             text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-            font-size: 28px;
-            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 35px;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
         .form-group {
             margin-bottom: 20px;
@@ -34,122 +36,193 @@
         label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
-            font-size: 14px;
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        input, select {
+        input, select, textarea {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
+            padding: 14px 18px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
             font-size: 16px;
             transition: all 0.3s ease;
             background: #fff;
+            font-family: inherit;
         }
-        input:focus, select:focus {
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #5865F2;
-            box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+        .file-upload {
+            border: 2px dashed #bdc3c7;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        .file-upload:hover {
+            border-color: #e74c3c;
+            background: #fff5f5;
+        }
+        .file-upload.dragover {
+            border-color: #e74c3c;
+            background: #fff5f5;
+        }
+        .file-list {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
         }
         button {
             width: 100%;
-            background: linear-gradient(135deg, #5865F2, #4752C4);
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
             color: white;
-            padding: 14px;
+            padding: 16px;
             border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 10px;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(88, 101, 242, 0.3);
+            box-shadow: 0 12px 25px rgba(231, 76, 60, 0.4);
         }
         .success {
-            background: #d4edda;
-            color: #155724;
-            padding: 12px;
+            background: #d1f2eb;
+            color: #0e6b47;
+            padding: 15px;
             border-radius: 8px;
-            margin-top: 15px;
-            border-left: 4px solid #28a745;
+            margin-top: 20px;
+            border-left: 5px solid #27ae60;
+            font-weight: 600;
         }
         .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 12px;
+            background: #fadbd8;
+            color: #922b21;
+            padding: 15px;
             border-radius: 8px;
-            margin-top: 15px;
-            border-left: 4px solid #dc3545;
+            margin-top: 20px;
+            border-left: 5px solid #e74c3c;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>🛡️ Moderation Report</h2>
+        <h2>⚖️ Official Report Submission</h2>
         <form id="reportForm">
-        <div class="form-group">
-            <label>Your Username:</label>
-            <input type="text" id="yourUsername" required>
-        </div>
-        
-        <div class="form-group">
-            <label>Reported Username:</label>
-            <input type="text" id="reportedUsername" required>
-        </div>
-        
-        <div class="form-group">
-            <label>Action Used:</label>
-            <select id="action" required>
-                <option value="">Select Action</option>
-                <option value="Kick">Kick</option>
-                <option value="Banned">Banned</option>
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label>Reason:</label>
-            <select id="reason" required>
-                <option value="">Select Reason</option>
-                <option value="Spam">Spam</option>
-                <option value="Harassment">Harassment</option>
-                <option value="Inappropriate Content">Inappropriate Content</option>
-                <option value="Rule Violation">Rule Violation</option>
-                <option value="Toxic Behavior">Toxic Behavior</option>
-                <option value="Cheating/Exploiting">Cheating/Exploiting</option>
-                <option value="Other">Other</option>
-            </select>
-        </div>
-        
-        <button type="submit">Submit Report</button>
+            <div class="form-group">
+                <label>Your Username:</label>
+                <input type="text" id="yourUsername" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Reported Username:</label>
+                <input type="text" id="reportedUsername" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Why did you report them:</label>
+                <textarea id="reason" required placeholder="Provide detailed explanation of the violation..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Proof:</label>
+                <div class="file-upload" id="fileUpload">
+                    <p>📎 Drag to drop files or click to select</p>
+                    <p style="font-size: 12px; color: #999; margin-top: 5px;">Multiple files supported</p>
+                    <input type="file" id="fileInput" multiple style="display: none;" accept="image/*,video/*,.pdf,.txt,.doc,.docx">
+                </div>
+                <div id="fileList" class="file-list"></div>
+            </div>
+            
+            <button type="submit">Submit Official Report</button>
             <div id="message"></div>
         </form>
     </div>
 
     <script>
+        let selectedFiles = [];
+        
+        const fileUpload = document.getElementById('fileUpload');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        
+        fileUpload.addEventListener('click', () => fileInput.click());
+        
+        fileUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUpload.classList.add('dragover');
+        });
+        
+        fileUpload.addEventListener('dragleave', () => {
+            fileUpload.classList.remove('dragover');
+        });
+        
+        fileUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUpload.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+        
+        function handleFiles(files) {
+            selectedFiles = Array.from(files);
+            updateFileList();
+        }
+        
+        function updateFileList() {
+            if (selectedFiles.length === 0) {
+                fileList.innerHTML = '';
+                return;
+            }
+            
+            const fileNames = selectedFiles.map(file => `• ${file.name}`).join('<br>');
+            fileList.innerHTML = `<strong>Selected files:</strong><br>${fileNames}`;
+        }
+        
         document.getElementById('reportForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const yourUsername = document.getElementById('yourUsername').value;
             const reportedUsername = document.getElementById('reportedUsername').value;
-            const action = document.getElementById('action').value;
             const reason = document.getElementById('reason').value;
             const timeOfAction = new Date().toLocaleString();
             
+            const fileInfo = selectedFiles.length > 0 ? 
+                `${selectedFiles.length} file(s) attached: ${selectedFiles.map(f => f.name).join(', ')}` : 
+                'No files attached';
+            
             const embed = {
-                title: "🚨 Moderation Report",
-                color: 0xff0000,
+                title: "⚖️ OFFICIAL REPORT SUBMISSION",
+                color: 0xe74c3c,
                 fields: [
-                    { name: "Your Username", value: yourUsername, inline: true },
-                    { name: "Reported Username", value: reportedUsername, inline: true },
-                    { name: "Action Used", value: action, inline: true },
-                    { name: "Reason", value: reason, inline: true },
-                    { name: "Time of Action", value: timeOfAction, inline: true }
+                    { name: "Reporter", value: yourUsername, inline: true },
+                    { name: "Reported User", value: reportedUsername, inline: true },
+                    { name: "Time of Report", value: timeOfAction, inline: true },
+                    { name: "Violation Details", value: reason, inline: false },
+                    { name: "Evidence", value: fileInfo, inline: false }
                 ],
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
+                footer: { text: "Official Report System" }
             };
             
             try {
@@ -160,13 +233,15 @@
                 });
                 
                 if (response.ok) {
-                    document.getElementById('message').innerHTML = '<div class="success">Report sent successfully!</div>';
+                    document.getElementById('message').innerHTML = '<div class="success">✅ Report submitted successfully and is under review.</div>';
                     document.getElementById('reportForm').reset();
+                    selectedFiles = [];
+                    updateFileList();
                 } else {
                     throw new Error('Failed to send report');
                 }
             } catch (error) {
-                document.getElementById('message').innerHTML = '<div class="error">Error sending report. Please try again.</div>';
+                document.getElementById('message').innerHTML = '<div class="error">❌ Submission failed. Please try again.</div>';
             }
         });
     </script>
