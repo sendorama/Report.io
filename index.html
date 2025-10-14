@@ -127,8 +127,13 @@
         <h2>⚖️ Official Report Submission</h2>
         <form id="reportForm">
             <div class="form-group">
-                <label>Your Username:</label>
-                <input type="text" id="yourUsername" required>
+                <label>Your Discord Username:</label>
+                <input type="text" id="discordUsername" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Your VRChat Username:</label>
+                <input type="text" id="vrchatUsername" required>
             </div>
             
             <div class="form-group">
@@ -137,8 +142,17 @@
             </div>
             
             <div class="form-group">
-                <label>Why did you report them:</label>
-                <textarea id="reason" required placeholder="Provide detailed explanation of the violation..."></textarea>
+                <label>Report Description:</label>
+                <textarea id="reportDescription" required placeholder="Provide detailed description of the incident..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>If there was a victim to this case, do you have contact with them?:</label>
+                <select id="victimContact" required>
+                    <option value="">Select Answer</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
             </div>
             
             <div class="form-group">
@@ -202,9 +216,11 @@
         document.getElementById('reportForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const yourUsername = document.getElementById('yourUsername').value;
+            const discordUsername = document.getElementById('discordUsername').value;
+            const vrchatUsername = document.getElementById('vrchatUsername').value;
             const reportedUsername = document.getElementById('reportedUsername').value;
-            const reason = document.getElementById('reason').value;
+            const reportDescription = document.getElementById('reportDescription').value;
+            const victimContact = document.getElementById('victimContact').value;
             const timeOfAction = new Date().toLocaleString();
             
             const fileInfo = selectedFiles.length > 0 ? 
@@ -215,11 +231,13 @@
                 title: "⚖️ OFFICIAL REPORT SUBMISSION",
                 color: 0xe74c3c,
                 fields: [
-                    { name: "Reporter", value: yourUsername, inline: true },
-                    { name: "Reported User", value: reportedUsername, inline: true },
-                    { name: "Time of Report", value: timeOfAction, inline: true },
-                    { name: "Violation Details", value: reason, inline: false },
-                    { name: "Evidence", value: fileInfo, inline: false }
+                    { name: "Your Discord Username", value: discordUsername, inline: true },
+                    { name: "Your VRChat Username", value: vrchatUsername, inline: true },
+                    { name: "Reported Username", value: reportedUsername, inline: true },
+                    { name: "Report Description", value: reportDescription, inline: false },
+                    { name: "Victim Contact Available", value: victimContact, inline: true },
+                    { name: "Time of Action", value: timeOfAction, inline: true },
+                    { name: "Proof", value: fileInfo, inline: false }
                 ],
                 timestamp: new Date().toISOString(),
                 footer: { text: "Official Report System" }
@@ -237,6 +255,7 @@
                     document.getElementById('reportForm').reset();
                     selectedFiles = [];
                     updateFileList();
+                    document.getElementById('victimContact').value = '';
                 } else {
                     throw new Error('Failed to send report');
                 }
